@@ -18,6 +18,9 @@ The linter ensures that struct types in any `api/` directory follow these naming
 - **User-supplied Parameter Types:**  
   Must be named `Params<Object>` (e.g., `ParamsEdgeGateway`).
 
+- **Client Types:**  
+  Must be named `Client<Object>` (e.g., `ClientEdgeGateway`).
+
 If a struct type in an `api/` directory does not follow one of these conventions, the linter will report an error.
 
 ## Example
@@ -36,4 +39,11 @@ You should rename it to:
 type apiResponseEdgeGateway struct { // ✅ This is correct!
     // ...
 }
+```
+
+Or for a client type:
+
+```go
+type ClientEdgeGateway struct { // ✅ This is correct!
+    //
 ```
