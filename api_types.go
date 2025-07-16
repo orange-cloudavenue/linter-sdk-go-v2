@@ -13,7 +13,7 @@ import (
 var _ register.LinterPlugin = (*PluginSDKV2)(nil)
 
 func init() {
-	register.Plugin("sdkv2-api-types", New)
+	register.Plugin("linter-sdkv2", New)
 }
 
 type Element struct {
@@ -31,7 +31,7 @@ func New(_ any) (register.LinterPlugin, error) {
 func (f *PluginSDKV2) BuildAnalyzers() ([]*analysis.Analyzer, error) {
 	return []*analysis.Analyzer{
 		{
-			Name: "apitpyesnaming",
+			Name: "apitypesnaming",
 			Doc:  "checks that API types follow naming conventions (apiResponse<Object>, apiRequest<Object>, Model<Object>, Params<Object>)",
 			Run:  f.runAPITypes,
 		},
@@ -47,10 +47,7 @@ func (f *PluginSDKV2) GetLoadMode() string {
 }
 
 var (
-	apiResponseRe = regexp.MustCompile(`^apiResponse[A-Z][A-Za-z0-9]*$`)
-	apiRequestRe  = regexp.MustCompile(`^apiRequest[A-Z][A-Za-z0-9]*$`)
-	modelRe       = regexp.MustCompile(`^Model[A-Z][A-Za-z0-9]*$`)
-	paramsRe      = regexp.MustCompile(`^Params[A-Z][A-Za-z0-9]*$`)
+	apiTypesRe = regexp.MustCompile(`(apiResponse|apiRequest|Model|Params|Client)[A-Z][A-Za-z0-9]*$`)
 )
 
 func (f *PluginSDKV2) runAPITypes(pass *analysis.Pass) (any, error) {
@@ -74,11 +71,9 @@ func (f *PluginSDKV2) runAPITypes(pass *analysis.Pass) (any, error) {
 				if _, ok := typeSpec.Type.(*ast.StructType); !ok {
 					continue
 				}
-				if !apiResponseRe.MatchString(name) &&
-					!apiRequestRe.MatchString(name) &&
-					!modelRe.MatchString(name) &&
-					!paramsRe.MatchString(name) {
-					pass.Reportf(typeSpec.Pos(), "type %q does not follow API type naming conventions (see CONTRIBUTING.md)", name)
+
+				if !apiTypesRe.MatchString(name) {
+					pass.Reportf(typeSpec.Pos(), "type %s does not follow API type naming conventions", name)
 				}
 			}
 		}
