@@ -49,6 +49,6 @@ type apiResponseEdgeGateway struct { // ✅ This is correct!
 ## Regex Rule
 
 You can visualize and debug the naming convention regex used by this linter at the following link:  
-[https://regex101.com/r/g8Av6t/1](https://regex101.com/r/g8Av6t/1)
+[https://regex101.com/r/g8Av6t](https://regex101.com/r/g8Av6t)
 
 This tool helps you understand how the linter matches valid type names and can assist in troubleshooting naming issues.

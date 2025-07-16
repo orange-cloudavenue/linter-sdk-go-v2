@@ -47,7 +47,8 @@ func (f *PluginSDKV2) GetLoadMode() string {
 }
 
 var (
-	apiTypesRe = regexp.MustCompile(`((apiResponse|apiRequest|Model|Params)[A-Z][A-Za-z0-9]*$|Client$)`)
+	// Regex101 https://regex101.com/r/9Mv2Ak
+	apiTypesRe = regexp.MustCompile(`(^(apiResponse|apiRequest|Model|Params)[A-Z][A-Za-z0-9]*$|^Client$)`)
 )
 
 func (f *PluginSDKV2) runAPITypes(pass *analysis.Pass) (any, error) {

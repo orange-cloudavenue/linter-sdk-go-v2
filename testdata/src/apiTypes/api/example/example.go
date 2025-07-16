@@ -8,7 +8,7 @@ type (
 	apiRequestExample  struct{}
 	ModelExample       struct{}
 	ParamsExample      struct{}
-	ClientExample      struct{}
+	Client             struct{}
 )
 
 // Invalid API types
@@ -22,6 +22,8 @@ type (
 	}
 	exampleParams struct { // want "type exampleParams does not follow API type naming conventions"
 	}
-	exampleClient struct { // want "type exampleClient does not follow API type naming conventions"
+	ClientExample struct { // want "type ClientExample does not follow API type naming conventions"
+	}
+	ExampleClient struct { // want "type ExampleClient does not follow API type naming conventions"
 	}
 )
