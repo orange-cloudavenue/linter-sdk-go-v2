@@ -139,3 +139,23 @@ var (
 		},
 	}
 )
+
+func init() {
+	Endpoint{
+		Name:             "exampleEndpoint2", // want "field 'Name' must be in PascalCase"
+		Description:      "This is an example endpoint",
+		Method:           "HEADE", // want "field 'Method' must be one of GET, POST, PUT, PATCH, DELETE"
+		PathTemplate:     "/v1/example/{id}/{id2}",
+		DocumentationURL: "https://docs.example.com/api/v1/example",
+		PathParams: []PathParam{ // want "PathTemplate contains undeclared path parameter 'id2'"
+			{
+				Name:        "id",
+				Description: "The ID of the resource",
+				Required:    true,
+			},
+		},
+	}.Register()
+}
+
+func (e Endpoint) Register() {
+}

@@ -21,7 +21,6 @@ require (
 	github.com/orange-cloudavenue/common-go/internal/regex v0.0.0-20250718073934-40f61889caee // indirect
 	github.com/orange-cloudavenue/common-go/urn v1.0.1 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
-	github.com/yuroyoro/goast-viewer v0.0.0-20190531024818-3d08b047cb96 // indirect
 	golang.org/x/crypto v0.40.0 // indirect
 	golang.org/x/mod v0.26.0 // indirect
 	golang.org/x/net v0.42.0 // indirect
