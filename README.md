@@ -4,7 +4,9 @@ These linters are designed to enforce specific coding standards and conventions 
 
 ## What does it check?
 
-The linter ensures that struct types in any `api/` directory follow these naming conventions:
+### 1. API Types Naming Linter (`apitypesnaming`)
+
+Ensures that struct types in any `api/` directory follow these naming conventions:
 
 - **API Response Types:**  
   Must be named `apiResponse<Object>` (e.g., `apiResponseEdgeGateway`).
@@ -23,32 +25,80 @@ The linter ensures that struct types in any `api/` directory follow these naming
 
 If a struct type in an `api/` directory does not follow one of these conventions, the linter will report an error.
 
-## Example
-
-Suppose you have the following type in `api/edgegateway/v1/edgegateway.go`:
+#### Example
 
 ```go
 type EdgeGatewayResponse struct { // ❌ This will trigger a linter warning!
     // ...
 }
-```
 
-You should rename it to:
-
-```go
 type apiResponseEdgeGateway struct { // ✅ This is correct!
+    // ...
+}
+
+type Client struct { // ✅ This is correct for the main API client!
     // ...
 }
 ```
 
-## Notes
+#### Notes
 
 - The `Client` type should be named exactly `Client` (not `ClientEdgeGateway` or similar) for the main client struct in each API group.
 - All other types should follow the `apiResponse<Object>`, `apiRequest<Object>`, `Model<Object>`, or `Params<Object>` naming conventions as appropriate.
 
-## Regex Rule
+#### Regex Rule
 
 You can visualize and debug the naming convention regex used by this linter at the following link:  
 [https://regex101.com/r/g8Av6t](https://regex101.com/r/g8Av6t)
 
 This tool helps you understand how the linter matches valid type names and can assist in troubleshooting naming issues.
+
+---
+
+### 2. Endpoint Struct Fields Linter (`endpointstructfields`)
+
+Validates the usage and values of the `Endpoint` struct in the `cav/` package.  
+It checks for:
+
+- Presence of required fields: `Name`, `PathTemplate`, `Description`, `Method`, `DocumentationURL`
+- Field value correctness:
+  - `Name` must be non-empty and in PascalCase
+  - `Description` must be non-empty
+  - `Method` must be one of `GET`, `POST`, `PUT`, `PATCH`, `DELETE`
+  - `PathTemplate` must be non-empty and start with `/`
+  - `DocumentationURL` must be a valid URL
+- Path and query parameters:
+  - Each `PathParam` and `QueryParam` must have non-empty `Name` and `Description`
+  - All path parameters in `PathTemplate` must be declared in `PathParams`
+
+#### Example
+
+```go
+_ = Endpoint{
+    Name:             "MyEndpoint", // ✅ PascalCase
+    Description:      "This is an example endpoint",
+    Method:           "GET",        // ✅ Allowed method
+    PathTemplate:     "/v1/example/{id}", // ✅ Starts with /
+    DocumentationURL: "https://docs.example.com/api/v1/example", // ✅ Valid URL
+    PathParams: []PathParam{
+        {
+            Name:        "id", // ✅ Declared and used in PathTemplate
+            Description: "The ID of the resource",
+        },
+    },
+}
+```
+
+If any required field is missing or invalid, or if a path parameter is undeclared, the linter will report an error.
+
+---
+
+## How to Use
+
+These linters are implemented as a golangci-lint plugin.  
+Register them in your `.golangci.yml` and ensure they are enabled for your project.
+
+## References
+
+- See [CONTRIBUTING.md](../CONTRIBUTING.md) for the full naming convention rules.
+- For more on custom linters, see the [golangci-lint documentation](https://golangci-lint.run/usage/plugins/).
